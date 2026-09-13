@@ -1,11 +1,13 @@
 package org.thecoder779.Gui;
 
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.*;
+import org.thecoder779.Users.UserHandler;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -91,5 +93,10 @@ public class Gui {
 
             frame.setVisible(true);
         });
+        try {
+            UserHandler userHandler = new UserHandler();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
