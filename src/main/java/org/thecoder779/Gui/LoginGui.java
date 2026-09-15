@@ -1,5 +1,6 @@
 package org.thecoder779.Gui;
 
+import com.formdev.flatlaf.intellijthemes.FlatArcDarkOrangeIJTheme;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.*;
 import org.thecoder779.Users.*;
 
@@ -15,8 +16,8 @@ public class LoginGui implements Runnable {
 
     private UserHandler userHandler;
 
-    final int WIDTH = 600;
-    final int HEIGHT = 600;
+    final int WIDTH = 400;
+    final int HEIGHT = 400;
 
 
 
@@ -27,7 +28,7 @@ public class LoginGui implements Runnable {
     public LoginGui(String name) throws FileNotFoundException {
         userHandler = new UserHandler();
         //Set up the atom one dark theme
-        FlatMTAtomOneDarkIJTheme.setup();
+        FlatArcDarkOrangeIJTheme.setup();
 
         /*
         * JComponent Initialization
@@ -115,7 +116,7 @@ public class LoginGui implements Runnable {
     public void run() {
         int i = 0;
         while (!Thread.currentThread().isInterrupted()) {
-            if(i % 1000 == 0) System.out.println("running thread");
+            if(i % 1000000000 == 0) System.out.println("running thread");
             i++;
         }
     }
