@@ -3,19 +3,19 @@ package org.thecoder779.Users;
 public class User {
     private String username;
 
-    public String getUsername() {
+    protected String getUsername() {
         return username;
     }
 
     private final int ID;
 
-    public int getID() {
+    protected int getID() {
         return ID;
     }
 
-    private String password;
+    protected String password;
 
-    public String getPassword() {
+    protected String getPassword() {
         return password;
     }
 
@@ -29,5 +29,9 @@ public class User {
 
     private void display(){
         System.out.println("USER " + ID +": " + username + ", " + password);
+    }
+
+    public boolean checkCredentials(String uname, String pswd){
+        return uname.equals(username) && pswd.equals(password);
     }
 }

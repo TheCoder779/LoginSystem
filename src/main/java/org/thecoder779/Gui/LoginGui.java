@@ -5,10 +5,8 @@ import org.thecoder779.Users.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 
 public class LoginGui implements Runnable {
     private JPanel panel;
@@ -129,12 +127,7 @@ public class LoginGui implements Runnable {
         User user = userHandler.findUser(textField.getText());
         if (user!=null) {
             System.out.println("User found");
-            if(textField.getText().equals(user.getUsername())){
-                if (Arrays.equals(passwordField.getPassword(), user.getPassword().toCharArray())){
-                    System.out.println("User pswd match");
-                    credentialsCorrect = true;
-                }
-            }
+            credentialsCorrect = user.checkCredentials(textField.getText(), String.valueOf(passwordField.getPassword()));
         }
 
     }
