@@ -1,12 +1,14 @@
 package org.thecoder779.Gui;
 
 import com.formdev.flatlaf.intellijthemes.FlatArcDarkOrangeIJTheme;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.*;
 import org.thecoder779.Users.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 
 public class LoginGui implements Runnable {
     private JPanel panel;
@@ -14,28 +16,34 @@ public class LoginGui implements Runnable {
     private JPasswordField passwordField;
     private JButton loginButton;
 
+    private ActionListener actionlistener;
+
+    private boolean credentialsCorrect = false;
+
     private UserHandler userHandler;
 
     final int WIDTH = 400;
     final int HEIGHT = 400;
 
-
+    final int UPDATE_TIME = 60;
 
     private Thread thread;
 
     JFrame frame;
 
     public LoginGui(String name) throws FileNotFoundException {
-        userHandler = new UserHandler();
+        try {
+            userHandler = new UserHandler();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         //Set up the atom one dark theme
         FlatArcDarkOrangeIJTheme.setup();
 
         /*
         * JComponent Initialization
-        *
-        *
-        *
-        * */
+        */
         //Object initialization
         frame = new JFrame(name);
         panel = new JPanel(new GridBagLayout(), true);
@@ -78,17 +86,7 @@ public class LoginGui implements Runnable {
         //Login Button
         loginButton = new JButton("Login");
         loginButton.setPreferredSize(new Dimension(80, 30));
-        /*loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (
-                        Arrays.equals(passwordField.getPassword(), "ss".toCharArray()) &&
-                                (textField.getText().equals("sss"))
-                ) {
-                    System.out.println("login successful");
-                }
-            }
-        });*/
+
         constraints.gridx = 0;
         constraints.gridy = 7;
         constraints.weightx = 0.1;
@@ -102,23 +100,43 @@ public class LoginGui implements Runnable {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         frame.setVisible(true);
-
-        try {
-            userHandler = new UserHandler();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
         //Start the thread
         startThread();
+
+        loginButton.addActionListener((ActionEvent e) -> {
+            if(credentialsCorrect) {
+                System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            }
+        });
     }
 
     @Override
     public void run() {
-        int i = 0;
-        while (!Thread.currentThread().isInterrupted()) {
-            if(i % 1000000000 == 0) System.out.println("running thread");
-            i++;
+        while (!thread.isInterrupted()){
+            long time = System.nanoTime();
+            long wantedTime = time + (long) 1.0e9 / UPDATE_TIME;
+            try {
+                Thread.sleep((wantedTime - System.nanoTime()) / 1000000);
+                update();
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    private void update(){
+        User user = userHandler.findUser(textField.getText());
+        if (user!=null) {
+            System.out.println("User found");
+            if(textField.getText().equals(user.getUsername())){
+                if (Arrays.equals(passwordField.getPassword(), user.getPassword().toCharArray())){
+                    System.out.println("User pswd match");
+                    credentialsCorrect = true;
+                }
+            }
+        }
+
     }
 
     public void startThread(){

@@ -6,18 +6,14 @@ import java.util.*;
 
 public class UserHandler {
     private ArrayList<User> users;
-    private Scanner scanner;
-    File userFile = new File("db/USERS.txt");
+    private final Path path = Paths.get("db/USERS.txt");
 
     public UserHandler() throws FileNotFoundException {
         users = new ArrayList<>();
-        scanner = new Scanner(userFile);
         updateUsers();
     }
 
     private void updateUsers(){
-        Path path = Paths.get("db/USERS.txt");
-
         try {
             // 1. Read all lines from the file
             List<String> lines = Files.readAllLines(path);
@@ -34,6 +30,17 @@ public class UserHandler {
         }
     }
 
+
+    public User findUser(String uname){
+        for (User user : users) {
+            if (uname.equals(user.getUsername())) {
+                return user;
+            }
+        }
+        System.out.println("ERROR - could not find user");
+        return null;
+    }
+
     /**
      * Updates DB/users.txt
      */
@@ -45,6 +52,7 @@ public class UserHandler {
      * Updates the user array
      */
     private void addUser(char[] line){
+        users = new ArrayList<>();
         int i = 0;
 
         StringBuilder username = new StringBuilder();
@@ -65,7 +73,7 @@ public class UserHandler {
             i++;
         }
         i++;
-        while (!(line[i] == ';')){
+        while (!(line[i] == ';')) {
             password.append(line[i]);
             i++;
         }
